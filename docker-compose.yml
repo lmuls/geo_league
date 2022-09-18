@@ -5,3 +5,8 @@ services:
     build: ./database
     ports:
       - "5432:5432"
+
+  test-db:
+    build: ./database
+    ports:
+      - "5433:5432"
