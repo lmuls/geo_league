@@ -13,11 +13,10 @@ class Player(Base):
 
 class Game(Base):
     __tablename__ = "game"
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     map = Column(String)
     map_name = Column(String)
     round_count = Column(Integer)
-    round_limit = Column(Integer)
     time_limit = Column(Integer)
     date = Column(Date)
     rounds = relationship("Round", back_populates="game")
@@ -26,7 +25,8 @@ class Game(Base):
 class Round(Base):
     __tablename__ = "round"
     id = Column(Integer, primary_key=True)
-    game_id = Column(Integer, ForeignKey("game.id"))
+    round_number = Column(Integer)
+    game_id = Column(String, ForeignKey("game.id"))
     game = relationship("Game", back_populates="rounds")
     lat = Column(Float)
     lng = Column(Float)

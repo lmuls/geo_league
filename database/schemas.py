@@ -3,26 +3,11 @@ import datetime
 from pydantic import BaseModel
 
 
-class PlayerBase(BaseModel):
-    name: str
-
-
-class PlayerCreate(PlayerBase):
-    pass
-
-
-class Player(PlayerBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 class GameBase(BaseModel):
+    id: str
     map: str
     map_name: str
     round_count: int
-    round_limit: int
     time_limit: int
     date: datetime.date
 
@@ -32,15 +17,15 @@ class GameCreate(GameBase):
 
 
 class Game(GameBase):
-    id: int
+    pass
 
     class Config:
         orm_mode = True
 
 
 class RoundBase(BaseModel):
-    map: str
-    game_id: int
+    game_id: str
+    round_number: int
     lat: float
     lng: float
 
@@ -77,7 +62,48 @@ class ScoreCreate(ScoreBase):
 class Score(ScoreBase):
     id: int
     round: Round
-    player: Player
+
+    # player: Player
 
     class Config:
         orm_mode = True
+
+
+class PlayerBase(BaseModel):
+    name: str
+
+
+class PlayerCreate(PlayerBase):
+    pass
+
+
+class Player(PlayerBase):
+    id: int
+    scores: list[Score] = []
+    games: list[Game] = []
+
+    class Config:
+        orm_mode = True
+
+
+class GameInformation(BaseModel):
+    game_id: str
+    date: datetime.date
+
+
+class RoundResult(Round):
+    scores = list[Score]
+
+
+class GameResult(Game):
+    rounds: list[RoundResult]
+
+
+class PlayerResult(BaseModel):
+    name: str
+    points: int
+    games: list[GameResult]
+
+
+class Leaderboard(BaseModel):
+    players: list[PlayerResult]
