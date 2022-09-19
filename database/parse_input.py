@@ -5,8 +5,6 @@ from database.database import SessionLocal
 
 
 def parse(data: list[dict], game_information: dict, db: SessionLocal):
-    # TODO implement this in a smart way
-
     if len(data) == 0:
         raise Exception("Empty input data array")
     if len(game_information) == 0:
