@@ -1,7 +1,4 @@
-import json
-
 import os
-import datetime
 
 import pytest
 from sqlalchemy import create_engine
@@ -9,12 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
 from database.database import Base
-from database.models import Round, Score, Game
-
 from database.service import *
-from database import models
-
-from database.parse_input import parse
 from main import app, get_db
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
