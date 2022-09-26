@@ -1,0 +1,25 @@
+#component {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 2rem;
+
+    h1 {
+        margin-left: 1rem;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 1rem 1rem;
+        align-items: flex-start;
+
+        * {
+            margin: .25rem 0;
+            color: #fff;
+        }
+    }
+
+}

@@ -1,0 +1,56 @@
+@import 'colors';
+@import 'sizes';
+@import 'mixins';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: white;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+li {
+  list-style: none;
+}
+
+.active {
+  color: $bitter-lime;
+}
+
+.inactive {
+  color: #284B63;
+}
+
+.instrument-name {
+    font-size: 1.6rem;
+}
+
+.dashboard-item {
+  @include morph
+}
+
+.MuiPaper-root {
+  background: $rich-black-fogra-29;
+
+  .MuiTableHead-root {
+    .MuiTableCell-root {
+      background: $rich-black-fogra-29;
+    }
+  }
+}
+
+.MuiTableBody-root {
+  background: $rich-black-fogra-29;
+}

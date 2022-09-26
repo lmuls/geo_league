@@ -10,3 +10,16 @@ services:
     build: ./database
     ports:
       - "5433:5432"
+
+  backend:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - DB_URL=postgresql://geouser:geoPASS123@db:5432/geoleague
+      - TEST_DB_URL=postgresql://geouser:geoPASS123@test-db:5433/geoleague
+      - DB_NAME=geoleague
+      - DB_USER=geouser
+      - DB_PASSWORD=geoPASS123
