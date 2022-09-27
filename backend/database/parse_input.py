@@ -39,7 +39,7 @@ def parse(data: list[dict], game_information: dict, db: SessionLocal):
 
         guess_number = 1
         for guess in result["game"]["player"]["guesses"]:
-            existing_guess = db.query(Score).join(Round).filter(Score.player_id == player.id).filter(Round.round_number == guess_number).first()
+            existing_guess = db.query(Score).join(Round).filter(Score.player_id == player.id).filter(Round.game_id == game.id).filter(Round.round_number == guess_number).first()
             equivalent_round = db.query(Round).filter(Round.game_id == game.id).filter(Round.round_number == guess_number).first()
             if existing_guess is None:
                 service.create_score(db, schemas.ScoreCreate(round_id=equivalent_round.id, player_id=player.id, lat=guess["lat"], lng=guess["lng"], timed_out=guess["timedOut"],

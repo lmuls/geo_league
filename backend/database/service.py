@@ -62,7 +62,7 @@ def get_leaderboard(db: Session) -> Leaderboard:
     players: list[Player] = db.query(Player).all()
 
     for player in players:
-        scores = db.query(Score).filter(Score.player_id == player.id)
+        scores = db.query(Score).filter(Score.player_id == player.id).all()
 
         points = 0
         for score in scores:
@@ -79,6 +79,7 @@ def get_leaderboard(db: Session) -> Leaderboard:
                 game_points += score.round_score_points
 
             game_results.append(GameResult(rounds=rounds, map_name=game.map_name, points=game_points, date=game.date))
+        game_results.sort(key=lambda x: x.points, reverse=True)
         res.players.append(PlayerResult(name=player.name, points=points, games=game_results))
-
+    res.players.sort(key=lambda x: x.points, reverse=True)
     return res

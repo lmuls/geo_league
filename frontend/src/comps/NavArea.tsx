@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import {Link} from "react-router-dom"
 import AddIcon from '@mui/icons-material/Add';
 
-const pages = ["Leaderboard", "Spillere"];
+const pages = ["Leaderboard"];
 
 export default function NavArea({ children }: { children: ReactNode }) {
   const renderLinks = (links: string[]) => {
@@ -32,7 +32,7 @@ export default function NavArea({ children }: { children: ReactNode }) {
           <div className={styles.topNavRight}>
             <Link to={"/new-game"}>
             <AddIcon />
-            
+
             </Link>
           </div>
         </nav>

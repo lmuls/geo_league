@@ -31,7 +31,7 @@ function Row({player}: {player: Player}) {
           </IconButton>
         </TableCell>
         <TableCell size={"medium"} component="th" scope="row">
-              <a className={"instrument-name"}>{player.name}</a>
+              <a className={"player-name"}>{player.name}</a>
         </TableCell>
         <TableCell align="right">
           {player.games.length}

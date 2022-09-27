@@ -11,7 +11,7 @@ from database.database import Base
 from database.models import Game, Player, Round, Score
 from database.parse_input import parse
 from database.service import create_player, get_players, create_game, get_games, create_round, create_score, get_leaderboard
-from tests.test_parse_input import get_local_test_data
+from tests.test_parse_input import get_local_test_data, get_local_test_data_2
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
 Session = sessionmaker()
@@ -95,12 +95,18 @@ def test_create_score(session):
 
 
 data, game_information = get_local_test_data()
+data2, game_information2 = get_local_test_data_2()
 
 
 def test_get_leaderboard(session):
     parse(data, game_information, session)
+    parse(data2, game_information2, session)
 
     res = get_leaderboard(session)
     assert res is not None
-    assert len(res.players) == 5
-    assert res.players[0].games is not None
+    assert len(res.players) == 6
+    assert len(res.players[0].games) == 2
+
+    for index, player in enumerate(res.players):
+        if index is not 0:
+            assert player.points < res.players[index - 1].points

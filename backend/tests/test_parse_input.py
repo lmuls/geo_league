@@ -46,7 +46,18 @@ def get_local_test_data():
         return data, game_information
 
 
+def get_local_test_data_2():
+    with open("../database/test_data_2.json", "rb") as f:
+        data = json.load(f)
+        game_information = {
+            "date": datetime.date(2022, 9, 17),
+            "game_id": "wmaH8zFegtFblYHJ"
+        }
+        return data, game_information
+
+
 data, game_information = get_local_test_data()
+data2, game_information2 = get_local_test_data_2()
 
 
 def test_parse_handles_empty_input(session):
@@ -123,3 +134,16 @@ def test_parse_creates_scores_handles_duplicates(session):
     assert res[0].round.game.id == "LqzTy7nxHCCAMU5I"
     assert res[0].round_score_points == 4994
     assert res[4].round_score_points == 4999
+
+
+def test_parse_creates_scores_multiple_games(session):
+    parse(data, game_information, session)
+    parse(data2, game_information2, session)
+
+    res: list[Score] = session.query(models.Score).join(models.Round).join(models.Player).filter(models.Player.id == 2).all()
+
+    assert res is not None
+    res.sort(key=lambda x: x.round.game_id)
+    assert len(res) == 10
+    assert res[0].round.game.id == "LqzTy7nxHCCAMU5I"
+    assert res[-1].round.game.id == "wmaH8zFegtFblYHJ"

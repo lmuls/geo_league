@@ -33,8 +33,9 @@ li {
   color: #284B63;
 }
 
-.instrument-name {
-    font-size: 1.6rem;
+.player-name {
+    color: $header-gold;
+  font-size: 1.4rem;
 }
 
 .dashboard-item {
@@ -45,12 +46,19 @@ li {
   background: $rich-black-fogra-29;
 
   .MuiTableHead-root {
-    .MuiTableCell-root {
+    .MuiTableCell-head {
       background: $rich-black-fogra-29;
+      font-size: 1.6rem;
     }
   }
 }
 
 .MuiTableBody-root {
   background: $rich-black-fogra-29;
+  //font-size: 1.4rem;
+  .MuiTableCell-root {
+    background: $rich-black-fogra-29;
+    font-size: 1.2rem;
+    font-weight: normal;
+  }
 }
