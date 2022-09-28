@@ -1,3 +1,5 @@
+import json
+
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -37,8 +39,8 @@ def get_player(player_id: int, db: Session = Depends(get_db)):
 def post_game(game_information: GameInformation, db: Session = Depends(get_db)):
     try:
         import_data(game_information, db)
-    except:
-        raise HTTPException(status_code=500, detail="Some server error, not good...")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=json.dumps(str(e)))
 
 
 @app.get("/leaderboard/", response_model=Leaderboard)

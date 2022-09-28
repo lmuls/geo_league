@@ -4,12 +4,12 @@ services:
   db:
     build: ./database
     ports:
-      - "5432:5432"
+      - "5430:5432"
 
   test-db:
     build: ./database
     ports:
-      - "5433:5432"
+      - "5431:5432"
 
   backend:
     build: .

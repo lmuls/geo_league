@@ -18,3 +18,5 @@ def import_data(game_information: GameInformation, db):
         data = res.json()
         # game_information = {"game_id": game_information.game_id, "date": game_information.date}
         parse(data, game_information.dict(), db)
+    else:
+        raise Exception("Ble ikke noe henting av den urlen gitt")

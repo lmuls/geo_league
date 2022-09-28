@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker
 from database.database import Base
 from database.models import Round, Score
 
+from geo_league_vars import BASE_DIR
+
 from database.service import *
 from database import models
 
@@ -35,9 +37,8 @@ def session(connection):
     session.close()
     transaction.rollback()
 
-
 def get_local_test_data():
-    with open("../database/test_data.json", "rb") as f:
+    with open(os.path.join(BASE_DIR, "database/test_data.json"), "rb") as f:
         data = json.load(f)
         game_information = {
             "date": datetime.date(2022, 9, 17),
@@ -47,7 +48,7 @@ def get_local_test_data():
 
 
 def get_local_test_data_2():
-    with open("../database/test_data_2.json", "rb") as f:
+    with open(os.path.join(BASE_DIR, "database/test_data_2.json"), "rb") as f:
         data = json.load(f)
         game_information = {
             "date": datetime.date(2022, 9, 17),
@@ -120,30 +121,36 @@ def test_parse_creates_round_handles_duplicates(session):
     assert res[0].game_id == "LqzTy7nxHCCAMU5I"
 
 
-def test_parse_creates_scores_handles_duplicates(session):
+def test_parse_multiple_games(session):
     parse(data, game_information, session)
-    parse(data, game_information, session)
+    session.flush()
 
-    res: list[Score] = session.query(models.Score).join(models.Round).join(models.Game).join(models.Player).filter(models.Game.id == "LqzTy7nxHCCAMU5I").filter(models.Player.name == "Lmulsnes").all()
-
-    assert res is not None
-    res.sort(key=lambda x: x.round.round_number)
-    assert len(res) == 5
-    assert res[0].round.round_number is 1
-    assert res[4].round.round_number is 5
-    assert res[0].round.game.id == "LqzTy7nxHCCAMU5I"
-    assert res[0].round_score_points == 4994
-    assert res[4].round_score_points == 4999
-
-
-def test_parse_creates_scores_multiple_games(session):
-    parse(data, game_information, session)
     parse(data2, game_information2, session)
+    session.flush()
 
-    res: list[Score] = session.query(models.Score).join(models.Round).join(models.Player).filter(models.Player.id == 2).all()
+    player: Player = session.query(models.Player).first()
+    res: list[Score] = session.query(models.Score).join(models.Round).join(models.Player).filter(models.Player.id == player.id).all()
+    res.sort(key=lambda x: x.round.game_id)
 
     assert res is not None
-    res.sort(key=lambda x: x.round.game_id)
     assert len(res) == 10
     assert res[0].round.game.id == "LqzTy7nxHCCAMU5I"
     assert res[-1].round.game.id == "wmaH8zFegtFblYHJ"
+
+
+def test_random_name(session):
+    parse(data, game_information, session)
+    parse(data, game_information, session)
+
+    my_res: list[Score] = session.query(models.Score).join(models.Round).join(models.Game).join(models.Player).filter(models.Game.id == "LqzTy7nxHCCAMU5I").filter(models.Player.name == "Lmulsnes").all()
+
+    assert my_res is not None
+    my_res.sort(key=lambda x: x.round.round_number)
+    assert len(my_res) == 5
+    assert my_res[0].round.round_number is 1
+    assert my_res[4].round.round_number is 5
+    assert my_res[0].round.game.id == "LqzTy7nxHCCAMU5I"
+    assert my_res[0].round_score_points == 4994
+    assert my_res[4].round_score_points == 4999
+
+

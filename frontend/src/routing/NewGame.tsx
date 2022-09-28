@@ -1,13 +1,61 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+import {Alert, AlertColor, Button, TextField} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import styles from "../styles/NewGame.module.scss"
+import Box from "@mui/material/Box";
+
+const initialFormData = {
+    game_id: undefined,
+        date: undefined
+}
+
+enum Alerts {
+    SUCCESS = "success",
+    WARNING = "warning",
+    ERROR = "error"
+}
 
 export function NewGame() {
     const [isSaving, setIsSaving] = useState<boolean>(false)
-    const [formData, setFormData] = useState({
-        game_id: undefined,
-        date: undefined
-    });
+    const [formData, setFormData] = useState(initialFormData);
+    const [alerts, setAlerts] = useState<JSX.Element[]>([])
+
+    const createAlert = (type: AlertColor, message: string) => {
+        const alert = (
+            <Box m={2}>
+                <Alert variant="filled" severity={type}>
+                            {message}
+                        </Alert>
+            </Box>
+        )
+
+        setAlerts((alerts) => {
+            return [...alerts, alert]
+        })
+    }
+
+
+    useEffect(() => {
+
+
+    }, [])
+
+    useEffect(() => {
+        const cycleAlerts = setInterval(() => {
+        setAlerts((alerts) => {
+                    if(alerts.length) {
+                        alerts.shift()
+                        return alerts
+                    } else {
+                        return []
+                    }
+                })
+            }, 2000)
+
+        return () => {
+            clearInterval(cycleAlerts)
+        }
+    })
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
@@ -18,13 +66,14 @@ export function NewGame() {
     const handleSave = async () => {
         setIsSaving(true)
 
-        if(formData.game_id === undefined) {
-            window.alert("Du må jo fylle inn en gameid da...")
+        if(formData.game_id === undefined || formData.game_id === "") {
+            createAlert(Alerts.WARNING, "Du må jo fylle inn en gameid da...")
+
             return
         }
 
         if(formData.date === undefined) {
-            window.alert("Du må fylle inn en dato. Ellers får vi ikke holdt oversikt, og da blir det dårlig stemning")
+            createAlert(Alerts.WARNING, "Du må fylle inn en dato. Ellers får vi ikke holdt oversikt, og da blir det dårlig stemning")
             return
         }
         
@@ -37,17 +86,17 @@ export function NewGame() {
         })
 
         if(resp.status === 201) {
-            console.log("Game accepted, hope you played well")
+            createAlert(Alerts.SUCCESS, "Game was accepted, hope you played well")
+            setFormData(initialFormData)
             setIsSaving(false)
         } else {
-            console.log("Oooops, an error.")
+            createAlert(Alerts.ERROR, resp.statusText)
             setIsSaving(false)
         }
     }
 
     return (
         <div id={styles.component}>
-            
             <h1>Send inn nytt spill</h1>
             <form>
                 <TextField name="game_id" onChange={(e) => {
@@ -69,6 +118,9 @@ export function NewGame() {
                 />
                 <Button onClick={handleSave} variant="contained">Send inn</Button>
             </form>
+            <div className={styles.alerts}>
+                {alerts}
+            </div>
         </div>
     )
 }
