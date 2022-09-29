@@ -31,7 +31,7 @@ jobs:
       with:
         context: ./frontend
         push: true
-        tags: geoleague:frontend:latest
+        tags: yolobreaker/geoleague:frontend
         labels: ${{ steps.meta.outputs.labels }}
 
 
