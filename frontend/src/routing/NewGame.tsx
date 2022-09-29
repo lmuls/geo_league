@@ -77,7 +77,7 @@ export function NewGame() {
             return
         }
         
-        const resp = await fetch('/new-game/', {
+        const resp = await fetch(`${process.env.REACT_APP_DATABASE_URL}/new-game/`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

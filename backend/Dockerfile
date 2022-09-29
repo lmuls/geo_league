@@ -1,4 +1,11 @@
 FROM python:3.9.14-alpine
+
+ENV PYTHONPATH=/app/
+ENV DB_PORT=5432
+ENV TEST_DB_PORT=5432
+ENV DB_URL=postgresql://geouser:geoPASS123@db:${DB_PORT}/geoleague
+ENV TEST_DB_URL=postgresql://geouser:geoPASS123@test-db:${TEST_DB_PORT}/geoleague
+
 WORKDIR /app
 COPY ./requirements.txt /app/requirements.txt
 

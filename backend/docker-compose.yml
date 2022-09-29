@@ -3,23 +3,26 @@ version: "3.9"
 services:
   db:
     build: ./database
-    ports:
-      - "5430:5432"
+    expose:
+      - "5432"
 
   test-db:
     build: ./database
-    ports:
-      - "5431:5432"
+    expose:
+      - "5432"
 
   backend:
-    build: .
-    ports:
-      - "8000:8000"
+    image: geoleague_backend
+    environment:
+      - DB_PORT=5432
+      - TEST_DB_PORT=5432
     depends_on:
       - db
-    environment:
-      - DB_URL=postgresql://geouser:geoPASS123@db:5432/geoleague
-      - TEST_DB_URL=postgresql://geouser:geoPASS123@test-db:5433/geoleague
-      - DB_NAME=geoleague
-      - DB_USER=geouser
-      - DB_PASSWORD=geoPASS123
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: geoleague_frontend
+    ports:
+      - "80:80"
+

@@ -3,6 +3,7 @@ import json
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
+from starlette.middleware.cors import CORSMiddleware
 
 from database import models, service, schemas
 from database.batch import import_data
@@ -13,6 +14,18 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://127.0.0.1"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()

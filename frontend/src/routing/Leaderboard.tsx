@@ -14,17 +14,11 @@ export function Leaderboard() {
     }, [])
 
     const fetchData = async () => {
-        const res = await fetch('/leaderboard/')
+        const res = await fetch(`${process.env.REACT_APP_DATABASE_URL}/leaderboard/`, )
         if(res.status === 200) {
             const data = await res.json()
             setPlayers(data.players)
         }
-    }
-
-    console.log(players)
-
-    const renderPlayer = (player: Player) => {
-        return <h1>{player.name}</h1>
     }
 
     return (

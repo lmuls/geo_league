@@ -10,8 +10,8 @@ export default function NavArea({ children }: { children: ReactNode }) {
   const renderLinks = (links: string[]) => {
     return links.map((link) => {
       return (
-        <Link key={link} to={"/" + link.toLowerCase()}>
-          <a className={styles.link}>{link}</a>
+        <Link className={styles.link} key={link} to={"/" + link.toLowerCase()}>
+          {link}
         </Link>
       );
     });
@@ -23,9 +23,7 @@ export default function NavArea({ children }: { children: ReactNode }) {
         <nav className={styles.topNav}>
           <div className={styles.topNavLeft}>
             <Link to={"/"}>
-              <a>
                 <img src="geoleague.png" alt="Logo for geoleague" />
-              </a>
             </Link>
             <div className={styles.links}></div>
           </div>
