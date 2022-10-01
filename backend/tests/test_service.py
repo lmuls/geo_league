@@ -8,9 +8,9 @@ from sqlalchemy.orm import sessionmaker
 from database import schemas
 from database.database import Base
 
-from database.models import Game, Player, Round, Score
-from database.parse_input import parse
-from database.service import create_player, get_players, create_game, get_games, create_round, create_score, get_leaderboard
+from database.models import Game, Score
+from batch.parse_input import parse
+from service.service import create_player, get_players, create_game, get_games, create_round, create_score, get_leaderboard
 from tests.test_parse_input import get_local_test_data, get_local_test_data_2
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))

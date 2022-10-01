@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
-from .models import Player, Score, Round, Game
-from .schemas import Leaderboard, PlayerResult, GameResult
+from database import models, schemas
+from database.models import Player, Score, Round, Game
+from database.schemas import Leaderboard, PlayerResult, GameResult
 
 
 def get_player(db: Session, id: int):

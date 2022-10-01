@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
 
-from database import models, service, schemas
-from database.batch import import_data
+from database import models, schemas
+from service import service
+from batch.batch import import_data
 from database.database import SessionLocal, engine
 from database.schemas import Player, GameInformation, Leaderboard
 
@@ -27,6 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -36,6 +38,7 @@ def get_db():
 
 
 get_db()
+
 
 @app.get("/players", response_model=list[schemas.Player])
 def get_players(db: Session = Depends(get_db)):

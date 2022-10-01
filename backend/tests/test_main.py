@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
 from database.database import Base
-from database.service import *
+from service.service import *
 from main import app, get_db
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))

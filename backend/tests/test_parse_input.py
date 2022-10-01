@@ -7,14 +7,14 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database.database import Base
-from database.models import Round, Score
 
 from geo_league_vars import BASE_DIR
 
-from database.service import *
+from service.service import *
 from database import models
 
-from database.parse_input import parse
+import test_data.provider as tdp
+from batch.parse_input import parse
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
 Session = sessionmaker()
@@ -37,28 +37,9 @@ def session(connection):
     session.close()
     transaction.rollback()
 
-def get_local_test_data():
-    with open(os.path.join(BASE_DIR, "database/test_data.json"), "rb") as f:
-        data = json.load(f)
-        game_information = {
-            "date": datetime.date(2022, 9, 17),
-            "game_id": "LqzTy7nxHCCAMU5I"
-        }
-        return data, game_information
 
-
-def get_local_test_data_2():
-    with open(os.path.join(BASE_DIR, "database/test_data_2.json"), "rb") as f:
-        data = json.load(f)
-        game_information = {
-            "date": datetime.date(2022, 9, 17),
-            "game_id": "wmaH8zFegtFblYHJ"
-        }
-        return data, game_information
-
-
-data, game_information = get_local_test_data()
-data2, game_information2 = get_local_test_data_2()
+data, game_information = tdp.get_local_test_data()
+data2, game_information2 = tdp.get_local_test_data_2()
 
 
 def test_parse_handles_empty_input(session):
@@ -142,7 +123,8 @@ def test_random_name(session):
     parse(data, game_information, session)
     parse(data, game_information, session)
 
-    my_res: list[Score] = session.query(models.Score).join(models.Round).join(models.Game).join(models.Player).filter(models.Game.id == "LqzTy7nxHCCAMU5I").filter(models.Player.name == "Lmulsnes").all()
+    my_res: list[Score] = session.query(models.Score).join(models.Round).join(models.Game).join(models.Player).filter(models.Game.id == "LqzTy7nxHCCAMU5I").filter(
+        models.Player.name == "Lmulsnes").all()
 
     assert my_res is not None
     my_res.sort(key=lambda x: x.round.round_number)
@@ -152,5 +134,3 @@ def test_random_name(session):
     assert my_res[0].round.game.id == "LqzTy7nxHCCAMU5I"
     assert my_res[0].round_score_points == 4994
     assert my_res[4].round_score_points == 4999
-
-

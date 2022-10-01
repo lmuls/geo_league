@@ -1,8 +1,6 @@
-import json
-
 import requests
 
-from database.parse_input import parse
+from batch.parse_input import parse
 from database.schemas import GameInformation
 
 BASE_URL = "https://www.geoguessr.com/api/v3/results/scores/"

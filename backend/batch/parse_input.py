@@ -1,4 +1,4 @@
-from database import service
+from service import service
 import database.schemas as schemas
 from database.models import Game, Round, Score, Player
 from database.database import SessionLocal

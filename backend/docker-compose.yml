@@ -2,14 +2,26 @@ version: "3.9"
 
 services:
   db:
-    build: ./database
-    expose:
-      - "5432"
+    image: postgres:14.5
+    environment:
+      - POSTGRES_DB=geoleague
+      - POSTGRES_USER=geouser
+      - POSTGRES_PASSWORD=geoPASS123
+    ports:
+      - "5432:5432"
+  #    expose:
+  #      - "5432"
 
   test-db:
-    build: ./database
-    expose:
-      - "5432"
+    image: postgres:14.5
+    environment:
+      - POSTGRES_DB=geoleague
+      - POSTGRES_USER=geouser
+      - POSTGRES_PASSWORD=geoPASS123
+    ports:
+      - "5433:5432"
+    #    expose:
+    #      - "5432"
 
   backend:
     image: geoleague_backend
