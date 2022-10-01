@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image CI frontend
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       with:
         context: ./frontend
         push: true
-        tags: yolobreaker/geoleague:frontend
+        tags: yolobreaker/geoleague:latest
         labels: ${{ steps.meta.outputs.labels }}
 
 
