@@ -17,7 +17,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
-    "http://127.0.0.1"
+    "http://127.0.0.1",
+    "http://deplo-loadb-50h0hx1kbfw1-4c9f648e705d62b7.elb.us-east-1.amazonaws.com"
 ]
 
 app.add_middleware(
