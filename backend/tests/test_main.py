@@ -1,13 +1,16 @@
 import os
+import time
 
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
 
+from batch.parse_input import parse
 from database.database import Base
 from service.service import *
 from main import app, get_db
+from test_data.provider import get_local_test_data
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
 Session = sessionmaker()
@@ -46,6 +49,7 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
+@pytest.mark.skip(reason="Limiting requests to geoguessr")
 def test_post_game(session):
     response = client.post(
         "/new-game/",
@@ -58,6 +62,7 @@ def test_post_game(session):
     # assert data is not None
 
 
+@pytest.mark.skip(reason="Limiting requests to geoguessr")
 def test_get_leaderboard(session):
     populate_response = client.post(
         "/new-game/",

@@ -8,6 +8,8 @@ const initialFormData = {
         date: undefined
 }
 
+let keyInc = 0;
+
 enum Alerts {
     SUCCESS = "success",
     WARNING = "warning",
@@ -21,7 +23,7 @@ export function NewGame() {
 
     const createAlert = (type: AlertColor, message: string) => {
         const alert = (
-            <Box m={2}>
+            <Box m={2} key={keyInc++}>
                 <Alert variant="filled" severity={type}>
                             {message}
                         </Alert>

@@ -23,7 +23,6 @@ export function Leaderboard() {
 
     return (
         <div className={style.component}>
-            <h1>Here be players</h1>
             <CollapsibleTable content={players} />
         </div>
         

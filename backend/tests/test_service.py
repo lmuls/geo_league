@@ -8,10 +8,10 @@ from sqlalchemy.orm import sessionmaker
 from database import schemas
 from database.database import Base
 
-from database.models import Game, Score
+from database.models import Game, Score, Player
 from batch.parse_input import parse
-from service.service import create_player, get_players, create_game, get_games, create_round, create_score, get_leaderboard
-from tests.test_parse_input import get_local_test_data, get_local_test_data_2
+from service.service import create_player, get_players, create_game, get_games, create_round, create_score, get_leaderboard, delete_game
+from test_data.provider import get_local_test_data, get_local_test_data_2
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
 Session = sessionmaker()
@@ -108,5 +108,22 @@ def test_get_leaderboard(session):
     assert len(res.players[0].games) == 2
 
     for index, player in enumerate(res.players):
-        if index is not 0:
+        if index != 0:
             assert player.points < res.players[index - 1].points
+
+
+def test_delete_game(session):
+    parse(data, game_information, session)
+    parse(data2, game_information2, session)
+
+    delete_game(session, game_information2.get("game_id"))
+    games: list[Game] = get_games(session)
+
+    assert len(games) == 1
+    assert games[0].id == game_information.get("game_id")
+
+    scores: list[Score] = session.query(Score).all()
+    assert len(scores) == sum([len(x.scores) for x in games[0].rounds])
+
+    players: list[Player] = session.query(Player).all()
+    assert len(players) == 5

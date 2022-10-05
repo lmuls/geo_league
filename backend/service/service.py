@@ -78,8 +78,20 @@ def get_leaderboard(db: Session) -> Leaderboard:
                 rounds.append(score)
                 game_points += score.round_score_points
 
-            game_results.append(GameResult(rounds=rounds, map_name=game.map_name, points=game_points, date=game.date))
+            game_results.append(GameResult(id=game.id, rounds=rounds, map_name=game.map_name, points=game_points, date=game.date))
         game_results.sort(key=lambda x: x.points, reverse=True)
         res.players.append(PlayerResult(name=player.name, points=points, games=game_results))
     res.players.sort(key=lambda x: x.points, reverse=True)
     return res
+
+
+def delete_game(db: Session, game_id: str):
+    game_to_delete = db.query(Game).filter(Game.id == game_id).first()
+    db.delete(game_to_delete)
+    db.commit()
+
+    players: list[Player] = db.query(Player).all()
+    for player in players:
+        if len(player.scores) == 0:
+            db.delete(player)
+    db.commit()

@@ -5,6 +5,7 @@ export interface Player {
 }
 
 export interface Game {
+    id: string;
     rounds: Score[];
     map_name: string;
     points: number;

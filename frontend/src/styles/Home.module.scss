@@ -1,23 +1,13 @@
-#mainCont {
-  position: relative;
-  height: 100%;
+.main {
+  margin: 1rem auto;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-
-  .heroCont {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 10px;
-    background: rgba(#000, 0.4);
-    color: #fff;
-    display:flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 1rem;
-    align-items: center;
-    backdrop-filter: blur(10px);
-    box-shadow: 5px 5px 5px 5px rgba(#000, 0.6);
+  img {
+    height: 500px;
+    width: auto
   }
 }
-

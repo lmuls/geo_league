@@ -34,7 +34,6 @@ li {
 }
 
 .player-name {
-    color: $header-gold;
   font-size: 1.4rem;
 }
 
@@ -51,6 +50,14 @@ li {
       font-size: 1.6rem;
     }
   }
+  .MuiTableRow-root {
+    &:first-child {
+      .player-name {
+          color: $header-gold;
+      }
+    }
+  }
+
 }
 
 .MuiTableBody-root {

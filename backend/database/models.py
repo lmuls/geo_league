@@ -19,7 +19,7 @@ class Game(Base):
     round_count = Column(Integer)
     time_limit = Column(Integer)
     date = Column(Date)
-    rounds = relationship("Round", back_populates="game")
+    rounds = relationship("Round", back_populates="game", cascade="all, delete-orphan")
 
 
 class Round(Base):
@@ -30,7 +30,7 @@ class Round(Base):
     game = relationship("Game", back_populates="rounds")
     lat = Column(Float)
     lng = Column(Float)
-    scores = relationship("Score", back_populates="round")
+    scores = relationship("Score", back_populates="round", cascade="all, delete-orphan")
 
 
 class Score(Base):

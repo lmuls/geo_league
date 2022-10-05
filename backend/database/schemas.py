@@ -96,6 +96,7 @@ class RoundResult(BaseModel):
 
 
 class GameResult(BaseModel):
+    id: str
     rounds: list[Score]
     map_name: str
     points: int

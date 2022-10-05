@@ -1,5 +1,6 @@
 import json
 
+import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -16,7 +17,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
-    "http://localhost",
+    "http://localhost:3000",
     "http://127.0.0.1",
     "http://deplo-loadb-50h0hx1kbfw1-4c9f648e705d62b7.elb.us-east-1.amazonaws.com"
 ]
@@ -63,3 +64,12 @@ def post_game(game_information: GameInformation, db: Session = Depends(get_db)):
 @app.get("/leaderboard/", response_model=Leaderboard)
 def get_leaderboard(db: Session = Depends(get_db)):
     return service.get_leaderboard(db)
+
+
+@app.get("/delete-game/{game_id}", status_code=status.HTTP_200_OK)
+def delete_game(game_id: str, db: Session = Depends(get_db)):
+    return service.delete_game(db, game_id)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

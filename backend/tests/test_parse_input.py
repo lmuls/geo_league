@@ -13,7 +13,7 @@ from geo_league_vars import BASE_DIR
 from service.service import *
 from database import models
 
-import test_data.provider as tdp
+from test_data.provider import get_local_test_data, get_local_test_data_2
 from batch.parse_input import parse
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
@@ -38,8 +38,8 @@ def session(connection):
     transaction.rollback()
 
 
-data, game_information = tdp.get_local_test_data()
-data2, game_information2 = tdp.get_local_test_data_2()
+data, game_information = get_local_test_data()
+data2, game_information2 = get_local_test_data_2()
 
 
 def test_parse_handles_empty_input(session):
