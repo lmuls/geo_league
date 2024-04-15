@@ -3,7 +3,7 @@ import os
 DB_HOST = '127.0.0.1'
 DB_NAME = 'geoleague'
 DB_PORT = '5432'
-TEST_DB_PORT = '5431'
+TEST_DB_PORT = '5433'
 DB_USER = 'geouser'
 DB_PASSWORD = 'geoPASS123'
 
