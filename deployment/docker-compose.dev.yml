@@ -9,8 +9,8 @@ services:
       - POSTGRES_PASSWORD=geoPASS123
     ports:
       - "5432:5432"
-  #    expose:
-  #      - "5432"
+    volumes:
+      - ../backend/database/pgdata:/var/lib/postgresql/data
 
   test-db:
     image: postgres:14.5
@@ -20,11 +20,9 @@ services:
       - POSTGRES_PASSWORD=geoPASS123
     ports:
       - "5433:5432"
-    #    expose:
-    #      - "5432"
 
   backend:
-    image: geoleague_backend
+    build: ../backend/
     environment:
       - DB_PORT=5432
       - TEST_DB_PORT=5432
@@ -34,7 +32,6 @@ services:
       - "8000:8000"
 
   frontend:
-    image: geoleague_frontend
+    build: ../frontend/
     ports:
       - "80:80"
-
