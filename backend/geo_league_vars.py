@@ -2,7 +2,7 @@ import os
 
 DB_HOST = '127.0.0.1'
 DB_NAME = 'geoleague'
-DB_PORT = '5430'
+DB_PORT = '5432'
 TEST_DB_PORT = '5431'
 DB_USER = 'geouser'
 DB_PASSWORD = 'geoPASS123'
@@ -21,7 +21,7 @@ proj_paths = [BASE_DIR]
 
 def set_local():
     counter = 0
-    with open(os.path.join(BASE_DIR, "venv\Lib\site-packages\_set_envs.pth"), "w") as f:
+    with open(os.path.join(BASE_DIR, "env\Lib\site-packages\_set_envs.pth"), "w") as f:
         f.write("import os; ")
         for k, v in proj_vars.items():
             if "/" or "\ " in v:
@@ -29,7 +29,7 @@ def set_local():
             else:
                 f.write("os.environ['" + k + "']=" + "'" + v + "';")
 
-    with open(os.path.join(BASE_DIR, "venv\Lib\site-packages\_set_path.pth"), "w") as f:
+    with open(os.path.join(BASE_DIR, "env\Lib\site-packages\_set_path.pth"), "w") as f:
         f.write("import sys;")
         for path in proj_paths:
             f.write("sys.path.insert(" + str(counter) + "," + "r'" + path + "');" )
