@@ -24,3 +24,7 @@ def get_local_test_data_2():
             "game_id": "wmaH8zFegtFblYHJ"
         }
         return data, game_information
+
+def get_html_test_data():
+    with open(os.path.join(__location__, "test.html"), "r", encoding="UTF-8") as f:
+        return f.read()
