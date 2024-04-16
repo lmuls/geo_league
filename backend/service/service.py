@@ -39,15 +39,6 @@ def create_game(db: Session, game: schemas.GameCreate):
     db.refresh(game)
     return game
 
-
-def create_round(db: Session, round: schemas.RoundCreate):
-    round = models.Round(game_id=str(round.game_id), round_number=round.round_number, lat=round.lat, lng=round.lng)
-    db.add(round)
-    db.commit()
-    db.refresh(round)
-    return round
-
-
 def create_score(db: Session, score: schemas.ScoreCreate):
     score = models.Score(round_id=score.round_id, player_id=score.player_id, lat=score.lat, lng=score.lng, timed_out=score.timed_out, timed_out_with_guess=score.timed_out_with_guess,
                          round_score_points=score.round_score_points, round_score_percentage=score.round_score_percentage, distance_meters=score.distance_meters, time=score.time)

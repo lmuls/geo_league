@@ -22,37 +22,11 @@ class Game(GameBase):
     class Config:
         orm_mode = True
 
-
-class RoundBase(BaseModel):
-    game_id: str
-    round_number: int
-    lat: float
-    lng: float
-
-
-class RoundCreate(RoundBase):
-    pass
-
-
-class Round(RoundBase):
-    id: int
-    game: Game
-
-    class Config:
-        orm_mode = True
-
-
 class ScoreBase(BaseModel):
-    round_id: int
+    game_id: str
     player_id: int
-    lat: float
-    lng: float
-    timed_out: bool
-    timed_out_with_guess: bool
-    round_score_points: int
-    round_score_percentage: float
-    distance_meters: float
-    time: int
+    score: int
+    meta: str
 
 
 class ScoreCreate(ScoreBase):
@@ -61,7 +35,7 @@ class ScoreCreate(ScoreBase):
 
 class Score(ScoreBase):
     id: int
-    round: Round
+    game: Game
 
     # player: Player
 
@@ -91,13 +65,8 @@ class GameInformation(BaseModel):
     date: datetime.date
 
 
-class RoundResult(BaseModel):
-    scores = list[Score]
-
-
 class GameResult(BaseModel):
     id: str
-    rounds: list[Score]
     map_name: str
     points: int
     date: datetime.date
