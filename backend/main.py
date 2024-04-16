@@ -1,10 +1,13 @@
 import json
 
 import uvicorn
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
+
+from typing import Annotated
+
 
 from database import models, schemas
 from service import service
@@ -69,6 +72,15 @@ def get_leaderboard(db: Session = Depends(get_db)):
 @app.get("/delete-game/{game_id}", status_code=status.HTTP_200_OK)
 def delete_game(game_id: str, db: Session = Depends(get_db)):
     return service.delete_game(db, game_id)
+
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile):
+    print(file.file.read())
+    # with open(file.file.read, "r") as f:
+    #     print(f.readlines())
+    # print(file.file.)
+    return {"filename": file.filename}
 
 
 if __name__ == "__main__":
