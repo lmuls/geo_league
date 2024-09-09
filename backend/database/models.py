@@ -13,10 +13,7 @@ class Player(Base):
 class Game(Base):
     __tablename__ = "game"
     id = Column(String, primary_key=True)
-    map = Column(String)
     map_name = Column(String)
-    round_count = Column(Integer)
-    time_limit = Column(Integer)
     date = Column(Date)
     scores = relationship("Score", back_populates="game", cascade="all, delete-orphan")
 
@@ -28,4 +25,3 @@ class Score(Base):
     player_id = Column(Integer, ForeignKey("player.id"))
     player = relationship("Player", back_populates="scores")
     score = Column(Integer)
-    meta = Column(String)
