@@ -5,10 +5,7 @@ from pydantic import BaseModel
 
 class GameBase(BaseModel):
     id: str
-    map: str
     map_name: str
-    round_count: int
-    time_limit: int
     date: datetime.date
 
 
@@ -26,7 +23,6 @@ class ScoreBase(BaseModel):
     game_id: str
     player_id: int
     score: int
-    meta: str
 
 
 class ScoreCreate(ScoreBase):

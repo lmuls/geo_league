@@ -1,3 +1,4 @@
+import datetime
 import json
 
 import uvicorn
@@ -11,9 +12,10 @@ from typing import Annotated
 
 from database import models, schemas
 from service import service
-from batch.batch import import_data
+from batch.parse_html import parse
+
 from database.database import SessionLocal, engine
-from database.schemas import Player, GameInformation, Leaderboard
+from database.schemas import Game, GameInformation, Leaderboard, Player
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -56,14 +58,6 @@ def get_player(player_id: int, db: Session = Depends(get_db)):
     return player
 
 
-@app.post("/new-game/", status_code=status.HTTP_201_CREATED)
-def post_game(game_information: GameInformation, db: Session = Depends(get_db)):
-    try:
-        import_data(game_information, db)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=json.dumps(str(e)))
-
-
 @app.get("/leaderboard/", response_model=Leaderboard)
 def get_leaderboard(db: Session = Depends(get_db)):
     return service.get_leaderboard(db)
@@ -75,12 +69,37 @@ def delete_game(game_id: str, db: Session = Depends(get_db)):
 
 
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    print(file.file.read())
+async def create_upload_file(file: UploadFile, db: Session = Depends(get_db)):    
+    parsed = parse(file.file.read())
+    game_id = parsed[0]
+    map_name = parsed[1]
+    results = parsed[2]
+    
+    game = db.query(models.Game).filter(models.Game.id == game_id).first()
+
+    if game is None:
+        create_game = schemas.GameCreate(id=game_id, map_name=map_name, date=datetime.date.today())
+        game = service.create_game(db, create_game)
+        
+    for result in results:
+        player_name = result[0]
+        player = db.query(models.Player).filter(models.Player.name == player_name).first()
+        if player is None:
+            player = service.create_player(db, schemas.PlayerCreate(name=player_name))
+
+        score = db.query(models.Score).filter(models.Score.game_id == game.id).filter( models.Score.player_id == player.id).first()
+        if score is None:
+            service.create_score(db, schemas.ScoreCreate(game_id=game_id, player_id=player.id, score=result[1]))
+        else:
+            score.score = result[1]
+    
+    db.commit()
+    
     # with open(file.file.read, "r") as f:
     #     print(f.readlines())
     # print(file.file.)
     return {"filename": file.filename}
+
 
 
 if __name__ == "__main__":

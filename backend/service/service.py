@@ -33,14 +33,14 @@ def create_player(db: Session, player: schemas.PlayerCreate):
 
 
 def create_game(db: Session, game: schemas.GameCreate):
-    game = models.Game(id=game.id, map=game.map, map_name=game.map_name, round_count=game.round_count, time_limit=game.time_limit, date=game.date)
+    game = models.Game(id=game.id, map_name=game.map_name, date=game.date)
     db.add(game)
     db.commit()
     db.refresh(game)
     return game
 
 def create_score(db: Session, score: schemas.ScoreCreate):
-    score = models.Score(round_id=score.round_id, player_id=score.player_id, score=score.score, meta=score.meta)
+    score = models.Score(game_id=score.game_id, player_id=score.player_id, score=score.score)
     db.add(score)
     db.commit()
     db.refresh(score)
@@ -58,7 +58,7 @@ def get_leaderboard(db: Session) -> Leaderboard:
         points = 0
         for score in scores:
             points += score.score
-        games: list[Game] = db.query(Game).join(Round).join(Score).filter(Score.player_id == player.id).all()
+        games: list[Game] = db.query(Game).join(Score).filter(Score.player_id == player.id).all()
 
         game_results: list[GameResult] = []
         for game in games:

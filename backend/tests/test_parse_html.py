@@ -11,9 +11,8 @@ from database.database import Base
 from geo_league_vars import BASE_DIR
 
 from service.service import *
-from database import models
 
-from test_data.provider import get_local_test_data, get_local_test_data_2, get_html_test_data
+from test_data.provider import get_html_test_data
 from batch.parse_html import parse
 
 engine = create_engine(os.environ.get("TEST_DB_URL"))
@@ -38,15 +37,25 @@ def session(connection):
     transaction.rollback()
 
 
-data, game_information = get_local_test_data()
-data2, game_information2 = get_local_test_data_2()
+def test_parse_html():
+    parsed = parse(get_html_test_data())
+    
+    game_id = parsed[0]
+    assert game_id == '6wH0fIB2VabiBp3j'
+    
+    map_name = parsed[1]
+    assert map_name == 'Oslo'
+    
+    results = parsed[2]
+    assert len(results) == 10
+    assert sum(res[1] for res in results) == 198389
+    
+test_parse_html()
 
-
-
-def test_parse_html(session):
-    parse(get_html_test_data())
-    assert 1 < 0
-
+def test_persist_results(session):
+    parsed = parse(get_html_test_data())
+    
+    
 
 # def test_parse_handles_empty_input(session):
 #     data = []
