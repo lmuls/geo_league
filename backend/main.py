@@ -2,7 +2,7 @@ import datetime
 import json
 
 import uvicorn
-from fastapi import FastAPI, Depends, HTTPException, File, UploadFile
+from fastapi import FastAPI, Depends, Form, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
@@ -23,8 +23,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
-    "http://127.0.0.1",
-    "http://deplo-loadb-50h0hx1kbfw1-4c9f648e705d62b7.elb.us-east-1.amazonaws.com"
+    "http://127.0.0.1:3000",
+
 ]
 
 app.add_middleware(
@@ -68,8 +68,8 @@ def delete_game(game_id: str, db: Session = Depends(get_db)):
     return service.delete_game(db, game_id)
 
 
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile, db: Session = Depends(get_db)):    
+@app.post("/new-game/")
+async def new_game(file: UploadFile = File(), date: datetime.date = Form(), db: Session = Depends(get_db)):    
     parsed = parse(file.file.read())
     game_id = parsed[0]
     map_name = parsed[1]
@@ -78,7 +78,7 @@ async def create_upload_file(file: UploadFile, db: Session = Depends(get_db)):
     game = db.query(models.Game).filter(models.Game.id == game_id).first()
 
     if game is None:
-        create_game = schemas.GameCreate(id=game_id, map_name=map_name, date=datetime.date.today())
+        create_game = schemas.GameCreate(id=game_id, map_name=map_name, date=date)
         game = service.create_game(db, create_game)
         
     for result in results:
