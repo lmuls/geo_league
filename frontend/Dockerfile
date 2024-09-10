@@ -1,7 +1,7 @@
 FROM node:16-alpine as build
 WORKDIR /app
 COPY . .
-ENV REACT_APP_DATABASE_URL=127.0.0.1:8000
+ENV REACT_APP_DATABASE_URL=http://127.0.0.1:8000
 RUN npm ci
 RUN npm run build
 # production environment
