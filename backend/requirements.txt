@@ -38,5 +38,5 @@ typing-inspection==0.4.1
 typing_extensions==4.14.1
 urllib3==1.26.12
 uvicorn==0.18.3
-watchfiles==0.17.0
+watchfiles==1.1.0
 websockets==10.3
