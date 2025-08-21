@@ -1,7 +1,10 @@
 FROM node:16-alpine as build
 WORKDIR /app
 COPY . .
-ENV REACT_APP_DATABASE_URL=http://127.0.0.1:8000
+ENV REACT_APP_DATABASE_URL=/api
+
+RUN apk add --no-cache python3 make g++ \
+    && npm config set python python3
 RUN npm ci
 RUN npm run build
 # production environment
