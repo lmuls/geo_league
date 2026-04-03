@@ -57,7 +57,7 @@ def get_leaderboard(db: Session = Depends(get_db)):
     return service.get_leaderboard(db)
 
 
-@app.get("/delete-game/{game_id}", status_code=status.HTTP_200_OK)
+@app.delete("/delete-game/{game_id}", status_code=status.HTTP_200_OK)
 def delete_game(game_id: str, db: Session = Depends(get_db)):
     return service.delete_game(db, game_id)
 

@@ -58,7 +58,7 @@ The app is served at `http://localhost` (port 80). Nginx routes `/api/*` to Fast
 | `GET` | `/api/leaderboard/` | Full leaderboard with per-player game history |
 | `POST` | `/api/new-game/` | Upload a GeoGuessr HTML results file |
 | `GET` | `/api/players` | List all players |
-| `GET` | `/api/delete-game/{game_id}` | Delete a game and its scores |
+| `DELETE` | `/api/delete-game/{game_id}` | Delete a game and its scores |
 
 ## CI/CD
 
