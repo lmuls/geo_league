@@ -12,13 +12,13 @@ def parse(html_str: str):
     map_url = info_box.a['href']
     map_name = info_box.a.text
 
-    results_table = soup.body.find(attrs={'class': re.compile('^results_table')})
-    results = results_table.findAll(attrs={'class': re.compile('^results_row_')})
-    
+    results_table = soup.body.find(attrs={'class': re.compile('results_table')})
+    results = results_table.findAll(attrs={'class': re.compile('results_row_')})
+
     parsed_results = []
-    
+
     for result in results[1:]:
-        columns = result.findAll(attrs={'class': re.compile('^results_column')})
+        columns = result.findAll(attrs={'class': re.compile('results_column')})
         
         name = columns[0].find('div', re.compile('^user-nick_nick')).text.strip()
         
