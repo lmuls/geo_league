@@ -1,6 +1,6 @@
 import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class GameBase(BaseModel):
@@ -14,10 +14,7 @@ class GameCreate(GameBase):
 
 
 class Game(GameBase):
-    pass
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ScoreBase(BaseModel):
     game_id: str
@@ -32,11 +29,7 @@ class ScoreCreate(ScoreBase):
 class Score(ScoreBase):
     id: int
     game: Game
-
-    # player: Player
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PlayerBase(BaseModel):
@@ -51,9 +44,7 @@ class Player(PlayerBase):
     id: int
     scores: list[Score] = []
     games: list[Game] = []
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class GameInformation(BaseModel):

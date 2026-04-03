@@ -12,6 +12,8 @@ coverage==6.4.4
 fastapi==0.116.1
 greenlet==3.2.4
 h11==0.13.0
+httpx>=0.23.0
+testcontainers[postgres]>=4.0.0
 httptools==0.6.4
 idna==3.4
 iniconfig==1.1.1

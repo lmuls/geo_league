@@ -49,6 +49,8 @@ def get_players(db: Session = Depends(get_db)):
 @app.get("/players/{player_id}", response_model=schemas.Player)
 def get_player(player_id: int, db: Session = Depends(get_db)):
     player: Player = service.get_player(db=db, id=player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail="Player not found")
     return player
 
 

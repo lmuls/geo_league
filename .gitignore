@@ -30,6 +30,9 @@ yarn-error.log*
 
 
 .idea
-
+.claude
 
 /backend/*.env
+/backend/env12
+
+
