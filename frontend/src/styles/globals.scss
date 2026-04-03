@@ -1,14 +1,58 @@
 @import 'colors';
-@import 'sizes';
-@import 'mixins';
 
-html,
-body {
-  padding: 0;
+:root {
+  --bg-base:      #040d12;
+  --bg-surface:   #071825;
+  --bg-elevated:  #0d2235;
+  --bg-hover:     #102840;
+  --border:       #1a3a52;
+  --border-subtle:#0f2436;
+
+  --accent-gold:  #{$header-gold};
+  --accent-blue:  #{$blue-ncs};
+  --accent-lime:  #{$bitter-lime};
+  --accent-red:   #{$terra-cotta};
+
+  --text-primary: #ddeaf4;
+  --text-muted:   #4d7a96;
+  --text-faint:   #1f4a62;
+
+  --rank-1: #{$header-gold};
+  --rank-2: #8fa8bb;
+  --rank-3: #c07840;
+
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+
+  --nav-h: 60px;
+
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  color: white;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -16,56 +60,13 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
 }
-
 
 li {
   list-style: none;
-}
-
-.active {
-  color: $bitter-lime;
-}
-
-.inactive {
-  color: #284B63;
-}
-
-.player-name {
-  font-size: 1.4rem;
-}
-
-.dashboard-item {
-  @include morph
-}
-
-.MuiPaper-root {
-  background: $rich-black-fogra-29;
-
-  .MuiTableHead-root {
-    .MuiTableCell-head {
-      background: $rich-black-fogra-29;
-      font-size: 1.6rem;
-    }
-  }
-  .MuiTableRow-root {
-    &:first-child {
-      .player-name {
-          color: $header-gold;
-      }
-    }
-  }
-
-}
-
-.MuiTableBody-root {
-  background: $rich-black-fogra-29;
-  //font-size: 1.4rem;
-  .MuiTableCell-root {
-    background: $rich-black-fogra-29;
-    font-size: 1.2rem;
-    font-weight: normal;
-  }
 }

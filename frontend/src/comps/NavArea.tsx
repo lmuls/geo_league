@@ -1,47 +1,41 @@
 import * as React from "react";
 import styles from "./NavAreaStyle.module.scss";
 import { ReactNode } from "react";
-import {Link} from "react-router-dom"
-import AddIcon from '@mui/icons-material/Add';
+import { Link } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
 
 const pages = ["Leaderboard"];
 
 export default function NavArea({ children }: { children: ReactNode }) {
-  const renderLinks = (links: string[]) => {
-    return links.map((link) => {
-      return (
-        <Link className={styles.link} key={link} to={"/" + link.toLowerCase()}>
-          {link}
-        </Link>
-      );
-    });
-  };
-
   return (
-    <div id={styles.mainFrame}>
-      <div id={styles.navArea}>
-        <nav className={styles.topNav}>
-          <div className={styles.topNavLeft}>
-            <Link to={"/"}>
-                <img src="geoleague.png" alt="Logo for geoleague" />
-            </Link>
-            <div className={styles.links}></div>
+    <div className={styles.shell}>
+      <nav className={styles.nav}>
+        <div className={styles.navLeft}>
+          <Link to="/" className={styles.logo}>
+            <span className={styles.logoText}>Geoleague</span>
+          </Link>
+          <div className={styles.navLinks}>
+            {pages.map((page) => (
+              <Link
+                key={page}
+                to={"/" + page.toLowerCase()}
+                className={styles.navLink}
+              >
+                {page}
+              </Link>
+            ))}
           </div>
-          <div className={styles.topNavRight}>
-            <Link to={"/new-game"}>
-            <AddIcon />
-
-            </Link>
-          </div>
-        </nav>
-        <div id={styles.pageOuterContents}>
-          <aside id={styles.asideNav}>
-            {renderLinks(pages)}
-          </aside>
-        <div id={styles.pageContents}>{children}</div>
-
         </div>
-      </div>
+
+        <div className={styles.navRight}>
+          <Link to="/new-game" className={styles.addButton}>
+            <AddIcon style={{ fontSize: 14 }} />
+            Nytt spill
+          </Link>
+        </div>
+      </nav>
+
+      <main className={styles.content}>{children}</main>
     </div>
   );
 }

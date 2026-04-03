@@ -1,86 +1,77 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import React, { useState } from "react";
+import { Player } from "../types";
 import { SubTable } from "./SubTable";
-import {Game, Player} from "../types"
+import styles from "./CollapsibleTable.module.scss";
 
-function Row({player}: {player: Player}) {
-  const [open, setOpen] = React.useState(false);
+function rankColor(rank: number): string {
+  if (rank === 1) return "var(--rank-1)";
+  if (rank === 2) return "var(--rank-2)";
+  if (rank === 3) return "var(--rank-3)";
+  return "var(--text-faint)";
+}
+
+function Row({ player, rank }: { player: Player; rank: number }) {
+  const [open, setOpen] = useState(false);
+  const color = rankColor(rank);
 
   return (
-    <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell size={"medium"} component="th" scope="row">
-              <a className={"player-name"}>{player.name}</a>
-        </TableCell>
-        <TableCell align="right">
-          {player.games.length}
-        </TableCell>
-        <TableCell align="right">{player.points}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Spilte games
-              </Typography>
-              <SubTable
-                games={player.games}
-              />
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
+    <div
+      className={`${styles.row} ${open ? styles.rowOpen : ""}`}
+      style={{ "--rank-color": color } as React.CSSProperties}
+    >
+      <button className={styles.rowMain} onClick={() => setOpen(!open)}>
+        <span className={styles.rankNum}>{String(rank).padStart(2, "0")}</span>
+
+        <span className={styles.name}>{player.name}</span>
+
+        <span className={styles.meta}>
+          <span className={styles.gamesBadge}>{player.games.length} spill</span>
+        </span>
+
+        <span className={styles.points}>
+          {player.points.toLocaleString("no-NO")}
+          <span className={styles.ptsSuffix}>pts</span>
+        </span>
+
+        <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}>
+          ↓
+        </span>
+      </button>
+
+      {open && (
+        <div className={styles.details}>
+          <SubTable games={player.games} />
+        </div>
+      )}
+    </div>
   );
 }
 
-export default function CollapsibleTable({
-  content,
-}: {
-  content: Player[];
-}) {
+export default function CollapsibleTable({ content }: { content: Player[] }) {
+  if (content.length === 0) {
     return (
-      <TableContainer component={Paper}>
-        <Table stickyHeader aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Speller</TableCell>
-              <TableCell align="right">Spilte games</TableCell>
-              <TableCell align="right">Poeng</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {content.map((element) => (
-              <Row
-                player={element}
-                key={element.name}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className={styles.empty}>
+        <span className={styles.emptyIcon}>◎</span>
+        <p>Ingen spillere ennå</p>
+        <p className={styles.emptyHint}>Last opp et spill for å komme i gang</p>
+      </div>
     );
-  } 
+  }
+
+  return (
+    <div className={styles.table}>
+      <div className={styles.header}>
+        <span className={styles.headerRank}>#</span>
+        <span className={styles.headerName}>Spiller</span>
+        <span />
+        <span className={styles.headerPoints}>Poeng</span>
+        <span />
+      </div>
+      <div className={styles.rows}>
+        {content.map((player, i) => (
+          <Row key={player.name} player={player} rank={i + 1} />
+        ))}
+      </div>
+    </div>
+  );
+}
